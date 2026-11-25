@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Marktmodell – Angebot und Nachfrage</title>
+<style>
+:root{--bg:#f4f6f9;--card:#fff;--ink:#1b2430;--mute:#5b6675;--line:#d5dbe3;--nach:#2160c4;--ang:#0e8a68;--gg:#1b2430;--warn:#b4232f}
+@media (prefers-color-scheme:dark){:root{--bg:#141a22;--card:#1d2530;--ink:#e8edf3;--mute:#9aa6b5;--line:#33404f;--nach:#6aa3ff;--ang:#43c9a3;--gg:#e8edf3;--warn:#ff7b86}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:980px;margin:0 auto;padding:20px 16px 48px}
+h1{font-size:1.7rem;margin:.2em 0 .1em}
+h2{font-size:1.2rem;margin:0 0 .5em}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px 18px;margin:16px 0}
+.sub{color:var(--mute);margin:0 0 8px}
+.n{color:var(--nach);font-weight:600}.a{color:var(--ang);font-weight:600}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:700px){.grid{grid-template-columns:1fr}}
+label{display:block;font-weight:600;margin-top:6px}
+input[type=range]{width:100%;accent-color:currentColor}
+.sl-n{color:var(--nach)}.sl-a{color:var(--ang)}
+.val{font-variant-numeric:tabular-nums;color:var(--mute);font-weight:400}
+.btns{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}
+button{font:inherit;padding:7px 12px;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:8px;cursor:pointer}
+button:hover{border-color:var(--mute)}
+button:focus-visible,input:focus-visible{outline:3px solid var(--nach);outline-offset:2px}
+svg{width:100%;height:auto;display:block}
+.out{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:10px}
+@media(max-width:600px){.out{grid-template-columns:1fr}}
+.out div{border:1px solid var(--line);border-radius:8px;padding:8px 10px}
+.out b{display:block;font-size:1.3rem;font-variant-numeric:tabular-nums}
+#erkl{border-left:4px solid var(--gg);padding:6px 12px;margin-top:12px;min-height:3.2em}
+#fix{margin-top:10px;padding:8px 12px;border:1px dashed var(--warn);border-radius:8px;display:none;color:var(--warn)}
+.formel{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.95rem;overflow-x:auto;white-space:nowrap;padding:2px 0}
+table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums}
+th,td{border-bottom:1px solid var(--line);padding:5px 8px;text-align:right}
+th:first-child,td:first-child{text-align:left}
+.hl td{font-weight:700;background:color-mix(in srgb,var(--ang) 15%,transparent)}
+.scroll{overflow-x:auto}
+details{margin-top:8px}
+summary{cursor:pointer;font-weight:600}
+</style>
+</head>
+<body>
+<main>
+<h1>Das Marktmodell: Angebot und Nachfrage</h1>
+<p class="sub">Verschiebe die Kurven und beobachte, wie sich Preis und Menge verändern.</p>
+
+<section class="card">
+<h2>Worum geht es?</h2>
+<p>Auf einem <b>Markt</b> treffen Käufer und Verkäufer aufeinander. Der <b>Preis</b> sorgt dafür, dass beide Seiten zusammenfinden.</p>
+<p><span class="n">Nachfragekurve:</span> Je höher der Preis, desto weniger Menge wollen die Käufer kaufen. Die Kurve fällt.<br>
+<span class="a">Angebotskurve:</span> Je höher der Preis, desto mehr Menge wollen die Anbieter verkaufen. Die Kurve steigt.<br>
+<b>Gleichgewicht:</b> Dort, wo sich beide Kurven schneiden, entspricht die nachgefragte der angebotenen Menge. Dieser Preis heißt <b>Gleichgewichtspreis</b>, die Menge <b>Gleichgewichtsmenge</b>. Der Markt ist „geräumt“.</p>
+<p><b>Entlang</b> der Kurve ändert sich nur der Preis. Ändert sich etwas anderes (Einkommen, Mode, Rohstoffkosten, Technik, Zahl der Anbieter …), <b>verschiebt</b> sich die ganze Kurve.</p>
+</section>
+
+<section class="card">
+<h2>Experimentiere selbst</h2>
+<div class="grid">
+<div class="sl-n"><label for="sN">Nachfrage verschieben: <span class="val" id="vN"></span></label>
+<input type="range" id="sN" min="-40" max="40" step="1" value="0" aria-describedby="hN">
+<div class="sub" id="hN">Rechts = Käufer wollen bei jedem Preis mehr kaufen.</div></div>
+<div class="sl-a"><label for="sA">Angebot verschieben: <span class="val" id="vA"></span></label>
+<input type="range" id="sA" min="-40" max="40" step="1" value="0" aria-describedby="hA">
+<div class="sub" id="hA">Rechts = Anbieter bieten bei jedem Preis mehr an.</div></div>
+</div>
+<div class="btns" role="group" aria-label="Ereignisse">
+<button data-n="20" data-a="0">Einkommen steigt</button>
+<button data-n="25" data-a="0">Produkt wird zum Trend</button>
+<button data-n="-25" data-a="0">Ersatzprodukt wird billiger</button>
+<button data-n="0" data-a="-20">Rohstoffe werden teurer</button>
+<button data-n="0" data-a="25">Neue Produktionstechnik</button>
+<button data-n="0" data-a="-30">Anbieter verlassen den Markt</button>
+<button data-n="0" data-a="0" id="reset">Zurücksetzen</button>
+</div>
+
+<svg id="chart" viewBox="0 0 640 400" role="img" aria-label="Diagramm mit Nachfrage- und Angebotskurve"></svg>
+
+<div class="out" aria-live="polite">
+<div>Gleichgewichtspreis<b id="oP"></b></div>
+<div>Gleichgewichtsmenge<b id="oX"></b></div>
+<div>Umsatz (Preis · Menge)<b id="oU"></b></div>
+</div>
+<div id="erkl" aria-live="polite"></div>
+
+<label style="margin-top:14px"><input type="checkbox" id="fixOn"> Der Staat legt einen Preis fest</label>
+<div id="fixBox" style="display:none">
+<label for="fixP">Festpreis: <span class="val" id="vF"></span></label>
+<input type="range" id="fixP" min="1" max="11" step="0.1" value="6">
+</div>
+<div id="fix" aria-live="polite"></div>
+</section>
+
+<section class="card">
+<h2>Rechenbeispiel</h2>
+<p>Markt für Eis (Menge in Kugeln pro Tag, Preis in € pro Kugel). Die Funktionen ändern sich live mit deinen Reglern:</p>
+<div class="formel" id="fN"></div>
+<div class="formel" id="fA"></div>
+<p><b>Gleichgewicht:</b> Nachfragemenge = Angebotsmenge</p>
+<div class="formel" id="fG"></div>
+<div class="scroll"><table>
+<thead><tr><th>Preis in €</th><th>Nachfragemenge</th><th>Angebotsmenge</th><th>Ergebnis</th></tr></thead>
+<tbody id="tb"></tbody></table></div>
+<details><summary>Rechnung im Ausgangszustand (ohne Verschiebung)</summary>
+<p class="formel">100 − 10p = −20 + 20p<br>120 = 30p<br>p = 4 €<br>x = 100 − 10·4 = 60 Kugeln</p></details>
+</section>
+
+<section class="card">
+<h2>Zum Nachdenken</h2>
+<ol>
+<li>Das Einkommen steigt: Was passiert mit Preis und Menge? Überprüfe deine Vermutung am Regler.</li>
+<li>Die Nachfrage steigt <i>und</i> das Angebot sinkt. Was ist sicher, was hängt von der Stärke der Verschiebung ab?</li>
+<li>Der Staat setzt den Preis unter dem Gleichgewichtspreis fest. Wer profitiert, wer hat ein Problem? Was könnte auf dem Markt passieren?</li>
+</ol>
+</section>
+</main>
+
+<script>
+const $=id=>document.getElementById(id);
+const W=640,H=400,L=52,R=20,T=18,B=44,XM=140,PM=12;
+const sx=x=>L+x/XM*(W-L-R), sy=p=>H-B-p/PM*(H-T-B);
+const fmt=(v,d=2)=>v.toLocaleString('de-DE',{minimumFractionDigits:0,maximumFractionDigits:d});
+const sg=v=>(v<0?'− ':'+ ')+fmt(Math.abs(v));
+const NS='http://www.w3.org/2000/svg';
+let sN=0,sA=0;
+// Nachfrage: x = 100 - 10p + sN | Angebot: x = -20 + 20p + sA
+const xN=(p,s=sN)=>Math.max(0,100-10*p+s), xA=(p,s=sA)=>Math.max(0,-20+20*p+s);
+const eq=(n,a)=>{const p=4+(n-a)/30;return {p,x:100-10*p+n}};
+function el(t,at,txt){const e=document.createElementNS(NS,t);for(const k in at)e.setAttribute(k,at[k]);if(txt!==undefined)e.textContent=txt;return e}
+function curves(svg,n,a,cls){
+ const d=el('line',{x1:sx(0),y1:sy((100+n)/10),x2:sx(XM),y2:sy((100+n-XM)/10),stroke:cls?'var(--mute)':'var(--nach)','stroke-width':cls?1.5:3,'stroke-dasharray':cls?'5 4':'none','stroke-linecap':'round'});
+ const s=el('line',{x1:sx(0),y1:sy((20-a)/20),x2:sx(XM),y2:sy((XM+20-a)/20),stroke:cls?'var(--mute)':'var(--ang)','stroke-width':cls?1.5:3,'stroke-dasharray':cls?'5 4':'none','stroke-linecap':'round'});
+ svg.append(d,s);
+}
+function draw(){
+ const svg=$('chart');svg.replaceChildren();
+ const defs=el('defs',{});const cp=el('clipPath',{id:'cp'});cp.append(el('rect',{x:L,y:T,width:W-L-R,height:H-T-B}));defs.append(cp);svg.append(defs);
+ for(let p=0;p<=PM;p+=2){svg.append(el('line',{x1:L,x2:W-R,y1:sy(p),y2:sy(p),stroke:'var(--line)'}),el('text',{x:L-8,y:sy(p)+4,'text-anchor':'end','font-size':12,fill:'var(--mute)'},p))}
+ for(let x=0;x<=XM;x+=20){svg.append(el('line',{x1:sx(x),x2:sx(x),y1:T,y2:H-B,stroke:'var(--line)'}),el('text',{x:sx(x),y:H-B+16,'text-anchor':'middle','font-size':12,fill:'var(--mute)'},x))}
+ svg.append(el('text',{x:(L+W-R)/2,y:H-8,'text-anchor':'middle','font-size':13,fill:'var(--ink)'},'Menge x (Kugeln pro Tag)'));
+ svg.append(el('text',{x:14,y:(T+H-B)/2,'text-anchor':'middle','font-size':13,fill:'var(--ink)',transform:`rotate(-90 14 ${(T+H-B)/2})`},'Preis p (€)'));
+ const g=el('g',{'clip-path':'url(#cp)'});
+ if(sN||sA)curves(g,0,0,true);
+ curves(g,sN,sA,false);svg.append(g);
+ const e=eq(sN,sA);
+ // Beschriftung
+ svg.append(el('text',{x:sx(XM)-4,y:sy((100+sN-XM)/10)-8,'text-anchor':'end','font-size':14,'font-weight':700,fill:'var(--nach)'},'Nachfrage'));
+ svg.append(el('text',{x:sx(XM)-4,y:sy((XM+20-sA)/20)+(((XM+20-sA)/20)>PM-1?20:-8),'text-anchor':'end','font-size':14,'font-weight':700,fill:'var(--ang)'},'Angebot'));
+ // Festpreis
+ if($('fixOn').checked){
+  const pf=+$('fixP').value,a=xA(pf),n=xN(pf);
+  svg.append(el('line',{x1:L,x2:W-R,y1:sy(pf),y2:sy(pf),stroke:'var(--warn)','stroke-width':2,'stroke-dasharray':'2 4'}));
+  svg.append(el('line',{x1:sx(Math.min(a,n)),x2:sx(Math.max(a,n)),y1:sy(pf),y2:sy(pf),stroke:'var(--warn)','stroke-width':7,'stroke-linecap':'round'}));
+  svg.append(el('circle',{cx:sx(a),cy:sy(pf),r:5,fill:'var(--ang)'}),el('circle',{cx:sx(n),cy:sy(pf),r:5,fill:'var(--nach)'}));
+ }
+ if(e.p>0&&e.p<PM&&e.x>0&&e.x<XM){
+  svg.append(el('line',{x1:sx(e.x),x2:sx(e.x),y1:sy(e.p),y2:H-B,stroke:'var(--gg)','stroke-dasharray':'4 3'}),
+   el('line',{x1:L,x2:sx(e.x),y1:sy(e.p),y2:sy(e.p),stroke:'var(--gg)','stroke-dasharray':'4 3'}),
+   el('circle',{cx:sx(e.x),cy:sy(e.p),r:7,fill:'var(--gg)',stroke:'var(--card)','stroke-width':2}));
+ }
+ // Ausgabe
+ $('oP').textContent=fmt(e.p)+' €';$('oX').textContent=fmt(e.x,1);$('oU').textContent=fmt(e.p*e.x,0)+' €';
+ const e0=eq(0,0),dp=e.p-e0.p,dx=e.x-e0.x,eps=0.005;
+ let t;
+ if(!sN&&!sA)t='Ausgangslage: Bei 4 € werden 60 Kugeln nachgefragt und angeboten. Verschiebe eine Kurve oder wähle ein Ereignis.';
+ else{
+  const parts=[];
+  if(sN)parts.push('Die Nachfragekurve verschiebt sich nach '+(sN>0?'rechts':'links')+' ('+(sN>0?'mehr':'weniger')+' Nachfrage bei jedem Preis).');
+  if(sA)parts.push('Die Angebotskurve verschiebt sich nach '+(sA>0?'rechts':'links')+' ('+(sA>0?'mehr':'weniger')+' Angebot bei jedem Preis).');
+  parts.push('Der Gleichgewichtspreis '+(Math.abs(dp)<eps?'bleibt gleich':(dp>0?'steigt':'sinkt')+' um '+fmt(Math.abs(dp))+' €')+', die Gleichgewichtsmenge '+(Math.abs(dx)<eps?'bleibt gleich':(dx>0?'steigt':'sinkt')+' um '+fmt(Math.abs(dx),1))+'.');
+  t=parts.join(' ');
+ }
+ $('erkl').textContent=t;
+ // Festpreis-Text
+ const fx=$('fix');
+ if($('fixOn').checked){
+  const pf=+$('fixP').value,a=xA(pf),n=xN(pf);$('vF').textContent=fmt(pf)+' €';
+  fx.style.display='block';
+  if(Math.abs(n-a)<0.5)fx.textContent='Der Festpreis liegt (fast) im Gleichgewicht: Nachfrage und Angebot passen zusammen.';
+  else if(n>a)fx.textContent='Preis unter Gleichgewicht: Nachfrage '+fmt(n,1)+' > Angebot '+fmt(a,1)+'. Es herrscht ein Nachfrageüberhang von '+fmt(n-a,1)+' Kugeln. Das Gut ist knapp, verkauft werden nur '+fmt(a,1)+'.';
+  else fx.textContent='Preis über Gleichgewicht: Angebot '+fmt(a,1)+' > Nachfrage '+fmt(n,1)+'. Es herrscht ein Angebotsüberhang von '+fmt(a-n,1)+' Kugeln. Verkauft werden nur '+fmt(n,1)+'.';
+ }else fx.style.display='none';
+ // Rechenbeispiel
+ $('vN').textContent=(sN>0?'+':'')+sN;$('vA').textContent=(sA>0?'+':'')+sA;
+ $('fN').innerHTML='Nachfrage: x<sub>N</sub> = 100 − 10·p '+(sN?sg(sN):'');
+ $('fA').innerHTML='Angebot: x<sub>A</sub> = −20 + 20·p '+(sA?sg(sA):'');
+ $('fG').innerHTML='100 − 10p '+(sN?sg(sN):'')+' = −20 + 20p '+(sA?sg(sA):'')+'<br>30p = '+fmt(120+sN-sA)+' → p = '+fmt(e.p)+' €<br>x = '+fmt(e.x,1)+' Kugeln';
+ let rows='';const lo=Math.max(1,Math.floor(e.p)-2);
+ for(let i=0;i<6;i++){const p=lo+i,n=xN(p),a=xA(p),eqRow=Math.abs(p-e.p)<0.5;
+  rows+=`<tr${eqRow?' class="hl"':''}><td>${fmt(p)}</td><td>${fmt(n,1)}</td><td>${fmt(a,1)}</td><td>${n>a+.05?'Nachfrageüberhang':a>n+.05?'Angebotsüberhang':'Gleichgewicht'}</td></tr>`}
+ $('tb').innerHTML=rows;
+}
+function set(n,a){sN=Math.max(-40,Math.min(40,n));sA=Math.max(-40,Math.min(40,a));$('sN').value=sN;$('sA').value=sA;draw()}
+$('sN').oninput=e=>{sN=+e.target.value;draw()};
+$('sA').oninput=e=>{sA=+e.target.value;draw()};
+$('fixOn').onchange=e=>{$('fixBox').style.display=e.target.checked?'block':'none';draw()};
+$('fixP').oninput=draw;
+document.querySelectorAll('.btns button').forEach(b=>b.onclick=()=>b.id==='reset'?set(0,0):set(+b.dataset.n,+b.dataset.a));
+draw();
+</script>
+</body>
+</html>
